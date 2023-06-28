@@ -2,17 +2,26 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class Game {
-    private final int numberOfDecksUsed = 1;
-    private HashMap<Card, Integer> currentDeck = new HashMap<Card, Integer>();
-    private LinkedList<Card> deck = new LinkedList<Card>();
+public class GameEngine {
+    private final int numberOfDecksUsed = 6;
+    private final HashMap<Card, Integer> currentDeck = new HashMap<>();
+    private final LinkedList<Card> deck = new LinkedList<>();
     Random randomNumGen = new Random();
 
-    //todo gameStart
+    public int getCardsLeft() {
+        return cardsLeft;
+    }
+
+    private int cardsLeft = 52 * numberOfDecksUsed;
+    private final LinkedList<Player> participants = new LinkedList<>();
+    public void addParticipant(Player participant) {
+        participants.add(participant);
+    }
+
     public void gameStart() {
         makeCards();
         makeDeck();
-        //setting up of things
+
     }
 
     //todo gameTurn
@@ -26,13 +35,9 @@ public class Game {
         //6. dealer gets cards
     }
 
-    //todo finish betting
-    private boolean bet() {
-        return false;
-    }
 
-    //todo finish shuffle
     private boolean shuffle() {
+        cardsLeft = 52 * numberOfDecksUsed;
         System.out.println("Shuffling cards... //" + System.currentTimeMillis());
         for (int index = 0; index < currentDeck.size(); index++) {
             currentDeck.put((Card) currentDeck.keySet().toArray()[index], numberOfDecksUsed);
@@ -41,41 +46,39 @@ public class Game {
     }
 
 
-    private boolean deal() {
+    public void deal(Player player) {
         System.out.println("Dealing cards... //" + System.currentTimeMillis());
-        boolean isCardDealt = false;
-        while (!isCardDealt) {
-            Card cardDealt = (Card) currentDeck.keySet().toArray()[randomNumGen.nextInt(53)];
-            if (currentDeck.get(cardDealt) < 0) {
-                currentDeck.put(cardDealt, currentDeck.get(cardDealt) - 1);
-                isCardDealt = true;
+        Card cardDealt = null;
+        int randomNum = randomNumGen.nextInt(cardsLeft);
+        for (int index = 0; index < currentDeck.values().toArray().length; index++) {
+            randomNum = randomNum - (int) currentDeck.values().toArray()[index];
+            if (randomNum <= 0) {
+                cardDealt = (Card) currentDeck.keySet().toArray()[index];
+                break;
             }
         }
-        return true;
+        player.addCard(cardDealt);
+        cardsLeft--;
+
+        player.raiseHandValue(cardDealt.getType().value);
+        System.out.println("Card dealt: " + cardDealt.getType().symbol + cardDealt.getFace().symbol);
+        System.out.println("Current value in your hand: " + player.getHandValue());
     }
 
 
-    public boolean makeDeck() {
+    public void makeDeck() {
         System.out.println("Making the deck... //" + System.currentTimeMillis());
-        for (int index = 0; index < deck.size(); index++) {
-            currentDeck.put(deck.get(index), numberOfDecksUsed);
+        for (Card card : deck) {
+            currentDeck.put(card, numberOfDecksUsed);
         }
-        if (currentDeck.size() == 52 && currentDeck.get(currentDeck.keySet().toArray()[randomNumGen.nextInt(52 + 1)]) == numberOfDecksUsed) {
-            return true;
-        }
-        return false;
     }
 
-    public boolean makeCards() {
+    public void makeCards() {
         System.out.println("Creating the cards... //" + System.currentTimeMillis());
         for (int indexFace = 0; indexFace < CardFace.values().length; indexFace++) {
             for (int indexType = 0; indexType < CardType.values().length; indexType++) {
                 deck.add(new Card(CardType.values()[indexType], CardFace.values()[indexFace]));
             }
         }
-        if (deck.size() == 52) {
-            return true;
-        }
-        return false;
     }
 }

@@ -1,6 +1,6 @@
 public class Card {
-    private CardType type;
-    private CardFace face;
+    private final CardType type;
+    private final CardFace face;
 
 
     Card(CardType type, CardFace face) {
@@ -12,15 +12,8 @@ public class Card {
         return type;
     }
 
-    public void setType(CardType type) {
-        this.type = type;
-    }
-
     public CardFace getFace() {
         return face;
     }
 
-    public void setFace(CardFace face) {
-        this.face = face;
-    }
 }
