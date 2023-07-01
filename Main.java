@@ -5,18 +5,15 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Hello");
-        GameEngine blackjack = new GameEngine();
-        blackjack.gameStart();
-        Human playerOne = new Human();
-        Computer comp = new Computer();
-        blackjack.addParticipant(playerOne);
-        blackjack.addParticipant(comp);
-        blackjack.deal(playerOne);
-        blackjack.deal(playerOne);
-        playerOne.showHand();
+        GameEngine blackjack = new GameEngine(6);
+        blackjack.addParticipant(new Human(blackjack));
+        do {
+            blackjack.gameStart();
+            System.out.println("do you want to continue the game? (y/n)");
+        } while (GameEngine.sc.next().equals("y"));
 
-        System.out.println();
-        System.out.println("Cards left: " + blackjack.getCardsLeft());
+
+
     }
 
 

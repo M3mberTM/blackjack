@@ -1,19 +1,55 @@
-import java.util.LinkedList;
-
-public interface Player {
+public abstract class Player extends Participant {
 
 
-    boolean bet(int bettingAmount);
+    private int currentMoney = 500;
+    private int currentBet = 0;
 
-    boolean addCard(Card newCard);
 
-    void raiseHandValue(int amount);
 
-    int getHandValue();
+    public void setCurrentBet(int currentBet) {
+        this.currentBet = currentBet;
+    }
 
-    int getCurrentBet();
+    public void setCurrentMoney(int amount) {
+        this.currentMoney = amount;
+    }
 
-    LinkedList<Card> getCurrentHand();
+    public int getCurrentBet() {
+        return currentBet;
+    }
 
-    int getCurrentMoney();
+    public int getCurrentMoney() {
+        return currentMoney;
+    }
+
+    public void addMoney(int amount) {
+        this.currentMoney += amount;
+    }
+
+    public abstract void bet();
+
+    public void payout() {
+        int payout = (int) Math.floor(getCurrentBet() * 1.5);
+        addMoney(payout);
+        setCurrentBet(0);
+    }
+
+    public void tie() {
+        addMoney(getCurrentBet());
+        setCurrentBet(0);
+    }
+
+    public void doubleDown() {
+        setCurrentMoney(getCurrentMoney() - getCurrentBet());
+        setCurrentBet(getCurrentBet() * 2);
+        addCard(getGame().getRandomCard());
+    }
+
+    public void splitPair() {
+
+    }
+
+    public abstract void play();
+
+
 }

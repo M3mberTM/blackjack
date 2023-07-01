@@ -1,57 +1,41 @@
-import java.util.LinkedList;
-
-public class Human implements Player {
+public class Human extends Player {
 
 
-    private final LinkedList<Card> currentHand = new LinkedList<>();
-    private int currentMoney = 500;
-    private int handValue = 0;
-    private int currentBet = 0;
-    public int getHandValue() {
-        return handValue;
-    }
-
-    public int getCurrentBet() {
-        return currentBet;
+    public Human(GameEngine game) {
+        setGame(game);
     }
 
 
-
-    public LinkedList<Card> getCurrentHand() {
-        return currentHand;
-    }
-
-    public int getCurrentMoney() {
-        return currentMoney;
-    }
-
-    public void raiseHandValue(int amount) {
-        handValue += amount;
-    }
-
-    //todo finish betting
-    public boolean bet(int bettingAmount) {
-        if (currentMoney - bettingAmount >= 0) {
-            currentMoney = currentMoney - bettingAmount;
-            currentBet += bettingAmount;
-            return true;
+    public void bet() {
+        System.out.println("Current money: " + getCurrentMoney());
+        System.out.println("How much do you want to bet?");
+        int bettingAmount = GameEngine.sc.nextInt();
+        System.out.println("Betting " + bettingAmount + " coins.");
+        if (getCurrentMoney() - bettingAmount >= 0) {
+            setCurrentMoney(getCurrentMoney() - bettingAmount);
+            setCurrentBet(getCurrentBet() + bettingAmount);
         }
-        return false;
+
     }
 
 
-    public boolean addCard(Card newCard) {
-        currentHand.add(newCard);
-        return true;
-    }
+    public void play() {
+        System.out.println(getCurrentHand());
+        System.out.println("Value of hand: " + getHandValue());
+        System.out.println("Hit? (y/n)");
+        while (GameEngine.sc.next().equals("y")) {
+            addCard(getGame().getRandomCard());
+            System.out.println(getCurrentHand());
+            System.out.println("Value of hand: " + getHandValue());
+            if (isBust()) {
+                System.out.println("Busted");
+                setCurrentBet(0);
+                break;
+            } else {
+                System.out.println("Hit? (y/n)");
+            }
 
-    public void showHand() {
-        System.out.println("Your current hand is: ");
-        for (Card card : currentHand) {
-            System.out.print(card.getType().symbol + card.getFace().symbol);
-            System.out.print(", ");
         }
     }
-
 
 }

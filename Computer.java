@@ -1,47 +1,33 @@
-import java.util.LinkedList;
-
-public class Computer implements Player {
-    private final LinkedList<Card> currentHand = new LinkedList<>();
-    private int currentMoney = 500;
-    private int currentBet = 0;
-    private int handValue = 0;
-
-    public LinkedList<Card> getCurrentHand() {
-        return currentHand;
+public class Computer extends Player {
+    @Override
+    public void bet() {
+        int bettingAmount = GameEngine.randomNumGen.nextInt(getCurrentMoney());
+        setCurrentBet(bettingAmount);
     }
 
-    public int getCurrentMoney() {
-        return currentMoney;
-    }
+    @Override
+    public void play() {
+        System.out.println(getCurrentHand());
+        System.out.println("Value of hand: " + getHandValue());
+        boolean isStand = false;
+        while (!isStand) {
 
-    //todo finish betting
-    public boolean bet(int bettingAmount) {
-        if (currentMoney - bettingAmount >= 0) {
-            currentMoney = currentMoney - bettingAmount;
-            currentBet += bettingAmount;
-            return true;
+            if ((21 - getHandValue()) >= 10) {
+                addCard(getGame().getRandomCard());
+            } else {
+                if (GameEngine.randomNumGen.nextDouble() < (4 * (4 + (9 - (21 - getHandValue())))) / 52.0) {
+                    addCard(getGame().getRandomCard());
+                    if (isBust()) {
+                        System.out.println("Busted");
+                        setCurrentBet(0);
+                        break;
+                    }
+                } else {
+                    isStand = true;
+                    System.out.println("Computer stands");
+                }
+            }
         }
-        return false;
-    }
-
-
-    public boolean addCard(Card newCard) {
-        currentHand.add(newCard);
-        return true;
-    }
-
-    @Override
-    public void raiseHandValue(int amount) {
-        handValue += amount;
-    }
-
-    @Override
-    public int getHandValue() {
-        return handValue;
-    }
-
-    @Override
-    public int getCurrentBet() {
-        return currentBet;
     }
 }
+

@@ -16,4 +16,11 @@ public class Card {
         return face;
     }
 
+    public String toString() {
+        return this.type.symbol + this.face.symbol;
+    }
+
+    public int getCardValue() {
+        return this.type.value;
+    }
 }
