@@ -66,7 +66,7 @@ public class GameEngine {
             dealer.addCard(getRandomCard());
             dealer.addCard(getRandomCard());
             boolean dealerNatural = dealer.isNatural();
-            for (Player player : participants) {
+            for (Player player : participants) { //checking whether the player has a natural
                 boolean playerNatural = player.isNatural();
                 if (playerNatural && dealerNatural) { //tie
                     System.out.println("Player and the dealer are tied.");

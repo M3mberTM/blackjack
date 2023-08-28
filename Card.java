@@ -1,4 +1,4 @@
-public class Card {
+public class Card { //Card object
     private final CardType type;
     private final CardFace face;
 
