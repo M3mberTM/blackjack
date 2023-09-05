@@ -6,3 +6,5 @@ of blackjack and doesn't include all the things from competitive blackjack.
 ## How to run?
 
 Running the game is simple, just run the main.java file and everything should work out properly!
+
+*Of course, the game might be improved at a later time!*
